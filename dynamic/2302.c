@@ -22,13 +22,6 @@ int main()
 		scanf("%d",&vip);
 		result=result*array[vip-start];
 	}
-	if(m!=0)
-	{
-		result=result*array[n-vip];
-	}
-	else
-	{
-		result=result*array[n];
-	}
+	result=result*array[n-vip];
 	printf("%d\n",result);
 }
