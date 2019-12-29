@@ -1,69 +1,57 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
-
 int main()
 {
-	int c;
-	int sum;
-	int checksum;
-
-	char hyper[20][200000];
-	char fan[20][200000];
-	
-	char check[200000];
-
-	char hypersize[20];
-	int fansize[20];
-
+	int c,fansize,hypersize,mansize;
+	char hyper[200000];
+	int hyperman[200000];
+	char fan[200000];
 	scanf("%d",&c);
 
 	for(int cnt=0;cnt<c;cnt++)
 	{
-		char temp;
-		int i=0;
-		int count;
-		sum = 0;
+		mansize=0;
 		
-		scanf("%s",hyper[cnt]);
-		hypersize[cnt]=strlen(hyper[cnt]);
-
-		for(int j=0;j<hypersize[cnt];j++)
+		scanf("%s",hyper);
+		hypersize = strlen(hyper);
+		memset(hyperman,-1,hypersize*4);
+		for(int i=0;i<hypersize;i++)
 		{
-			temp = hyper[cnt][j];
-			
-			if(temp=='M')
+			if(hyper[i]=='M')
 			{
-				check[i]=j;
-				i++;
+				hyperman[mansize]=i;
+				mansize++;
 			}
 		}
-		
-		scanf("%s",fan[cnt]);
-		fansize[cnt]=strlen(fan[cnt]);
-		
-		count = fansize[cnt]-hypersize[cnt]+1;
-		if(i==0)
+		scanf("%s",fan);
+		fansize = strlen(fan);
+		if(mansize == 0)
 		{
-			printf("%d\n",count);
+			printf("%d\n",fansize-hypersize+1);
+
 		}
 		else
 		{
-			for(int k=0;k<count;k++)
+			int result=0;
+			int check=0;
+			for(int i=0;i<fansize-hypersize+1;i++)
 			{
-				checksum=0;
-				for(int a=0;a<i;a++)
+				check=0;
+				for(int j=0;j<mansize;j++)
 				{
-					if(fan[cnt][k+check[a]]=='M')
+					if(fan[i+hyperman[j]]=='M')
 					{
-						checksum=1;
+						check=1;
 						break;
 					}
 				}
-				if(checksum==0)
-					sum++;
+				if(check==1)
+				{
+					continue;
+				}
+				result++;
 			}
-			printf("%d\n",sum);
+			printf("%d\n",result);
 		}
 	}
 }
