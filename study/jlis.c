@@ -4,7 +4,7 @@
 
 long long *a;
 long long *b;
-int **save;
+int save[101][101];
 int n;
 int m;
 
@@ -97,10 +97,10 @@ int main()
 		scanf("%d %d",&n,&m);
 		a = (long long*)malloc(sizeof(long long)*n);
 		b = (long long*)malloc(sizeof(long long)*m);
-		save = (int**)malloc(sizeof(int*)*n+1);
+		//save = (int**)malloc(sizeof(int*)*n+1);
 		for(int i=0;i<n+1;i++)
 		{
-			save[i]=(int*)malloc(sizeof(int)*m+1);
+			//save[i]=(int*)malloc(sizeof(int)*m+1);
 			for(int j=0;j<m+1;j++)
 				save[i][j]=-1;
 			if(i!=n)
