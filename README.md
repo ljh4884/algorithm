@@ -1,6 +1,5 @@
 # not yet
-jlis
-ocr
-klis
-dragon
+ocr\n
+klis\n
+dragon\n
 
