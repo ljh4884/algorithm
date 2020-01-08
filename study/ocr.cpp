@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <string>
+#include <iostream>
+using namespace std;
 
 int m,q,n;
 
@@ -21,7 +24,7 @@ int change(char *name)
 		if(strcmp(name,Q[i])==0)
 			return i;
 	}
-	return m-1;
+	return m;
 }
 
 double max(double a,double b)
@@ -34,41 +37,32 @@ double max(double a,double b)
 
 double func(int pos,int pre)
 {
-	double cal;
-	double result=-1e200;
-	if(save[pos][pre]!=1.0)
-		return save[pos][pre];
-	if(pos==n)
+	if(pos == n) return 0;
+	double& ret = save[pos][pre];
+	if(ret != 1.0) return ret;
+	ret = -1e200;
+	int &choose = check[pos][pre];
+	for(int i=0;i<m;++i)
 	{
-		return 0;
-	}
-	for(int i=0;i<m;i++)
-	{
-		if(pos==0)
-			cal = B[i];
-		else
-			cal = T[pre][i];
-		cal = cal + M[i][R[pos]];
-		double temp = cal+func(pos+1,i);
-		if(result<temp)
+		double cand = T[pre][i]+M[i][R[pos]]+func(pos+1,i);
+		if(ret < cand)
 		{
-			result = temp;
-			check[pos][pre]=i;
+			ret = cand;
+			choose = i;
 		}
-	
 	}
-	save[pos][pre] = result;
-	return result;
+	return ret;
 }
 
-void find(int pos,int pre)
+string find(int pos,int pre)
 {
-	if(pos==n)
-		return;
-	int temp  = check[pos][pre];
-	printf("%s ",Q[temp]);
-	find(pos+1,temp);
+	int choose = check[pos][pre];
+	string ret = Q[choose];
+	if(pos < n-1)
+		ret = ret + " " + find(pos+1,choose);
+	return ret;
 }
+
 
 
 int main()
@@ -117,8 +111,7 @@ int main()
 		}
 		//printf("%lf\n",func(0,0));
 		func(0,0);
-		find(0,0);
-		printf("\n");
+		cout << find(0,0) +"\n";
 	}
 		
 }

@@ -10,7 +10,7 @@ double B[500];
 double T[500][500];
 double M[500][500];
 char sen[20][11];
-int R[100];
+int R[20];
 
 double save[102][502];
 int check[102][502];
@@ -21,7 +21,7 @@ int change(char *name)
 		if(strcmp(name,Q[i])==0)
 			return i;
 	}
-	return m-1;
+	return m;
 }
 
 double max(double a,double b)
@@ -45,10 +45,10 @@ double func(int pos,int pre)
 	for(int i=0;i<m;i++)
 	{
 		if(pos==0)
-			cal = B[i];
+			cal = log(B[i]);
 		else
-			cal = T[pre][i];
-		cal = cal + M[i][R[pos]];
+			cal = log(T[pre][i]);
+		cal = cal + log(M[i][change(sen[pos])]);
 		double temp = cal+func(pos+1,i);
 		if(result<temp)
 		{
@@ -81,38 +81,27 @@ int main()
 	}
 	for(int i=0;i<m;i++)
 	{
-		scanf("%lf",&temp);
-		B[i] = log(temp);
+		scanf("%lf",&B[i]);
 	}
 	for(int i=0;i<m;i++)
 	{
 		for(int j=0;j<m;j++)
-		{
-			scanf("%lf",&temp);
-			T[i][j] = log(temp);
-		}
+			scanf("%lf",&T[i][j]);
 	}
 	for(int i=0;i<m;i++)
-	{
 		for(int j=0;j<m;j++)
-		{
-			scanf("%lf",&temp);
-			M[i][j]=log(temp);
-		}
-	}
+			scanf("%lf",&M[i][j]);
 	for(int cnt=0;cnt<q;cnt++)
 	{
 		scanf("%d",&n);
 		for(int i=0;i<n;i++)
-		{
 			scanf("%s",sen[i]);
-			R[i]=change(sen[i]);
-		}
 		for(int i=0;i<n+2;i++)
 		{
 			for(int j=0;j<m+2;j++)
 			{
 				save[i][j]=1.0;
+				check[i][j]=0;
 			}
 		}
 		//printf("%lf\n",func(0,0));
