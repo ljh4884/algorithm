@@ -2,130 +2,70 @@
 #include <stdlib.h>
 #include <string.h>
 
-long long *a;
-long long *b;
-int save[101][101];
-int n;
-int m;
+int n,m;
 
-int max(int a,int b)
+int a[100];
+int b[100];
+int save[102][102];
+long long max(long long a,long long b)
 {
 	if(a>b)
 		return a;
 	else
 		return b;
+
 }
 
-int min(int a,int b)
-{
-	if(a<b)
-		return a;
-	else
-		return b;
-}
 
-int lis(int posa,int posb,long long comp)
+int func(int posa,int posb)
 {
-	int result=1;
-	
-	int i = posa;
-	int j = posb;
-	if(save[i][j]!=-1)
+	int result = 2;
+	long long tempa= (posa == -1 ? -4000000000 : a[posa]);
+	long long tempb= (posb == -1 ? -4000000000 : b[posb]);
+	long long cmp;
+	if(save[posa+1][posb+1]==-1)
 	{
-		return save[i][j];
-	}
-	while(1)
+	cmp = max(tempa,tempb);
+	if(tempa==tempb)
+		result = 1;
+
+	for(int i=posa+1;i<n;i++)
 	{
-		if(i==n&&j==m)
-			break;
-		if(i==n)
-		{
-			if(b[j]>comp)
-			{
-				result = max(result,1+lis(i,j,b[j]));
-			}
-			j++;
-		}
-		else if(j==m)
-		{
-			if(a[i]>comp)
-				result = max(result,1+lis(i,j,a[i]));
-			i++;
-		}
-		else if(a[i]==b[j])
-		{
-			
-			if(a[i]>comp)
-			{
-				result = max(result,1+lis(i,j,a[i]));
-			}
-			i++;
-			j++;
-		}
-		else if(a[i]<b[j])
-		{
-			if(a[i]>comp)
-			{
-				result = max(result,1+lis(i,j,a[i]));
-			}
-			i++;
-		}
-		else
-		{
-			
-			if(b[j]>comp)
-			{
-				result = max(result,1+lis(i,j,b[j]));
-			}
-			j++;
-		}
+		if(cmp<a[i])
+			result = max(result,1+func(i,posb));
 	}
-	save[posa][posb] = result;
-	return result;
+	for(int j=posb+1;j<m;j++)
+	{
+		if(cmp<b[j])
+			result = max(result,1+func(posa,j));
+	}
+	save[posa+1][posb+1]=result;
+	}
+	return save[posa+1][posb+1];
 }
 
 int main()
 {
 	int c;
-	
 	scanf("%d",&c);
-
 	for(int cnt=0;cnt<c;cnt++)
 	{
-		int result = 0;
-		long long comp=0;
 		scanf("%d %d",&n,&m);
-		a = (long long*)malloc(sizeof(long long)*n);
-		b = (long long*)malloc(sizeof(long long)*m);
-		//save = (int**)malloc(sizeof(int*)*n+1);
-		for(int i=0;i<n+1;i++)
+		for(int i=0;i<n+2;i++)
 		{
-			//save[i]=(int*)malloc(sizeof(int)*m+1);
-			for(int j=0;j<m+1;j++)
+			for(int j=0;j<m+2;j++)
+			{
 				save[i][j]=-1;
-			if(i!=n)
-				scanf("%lld",&a[i]);
+			}
+		}
+		for(int i=0;i<n;i++)
+		{
+			scanf("%d",&a[i]);
 		}
 		for(int i=0;i<m;i++)
 		{
-			scanf("%lld",&b[i]);
+			scanf("%d",&b[i]);
 		}
-
-		
-		
-		for(int i=0;i<n;i++)
-		{
-			for(int j=0;j<m;j++)
-			{
-				if(a[i]<b[j])
-					comp = a[i];
-				else
-					comp = b[j];
-				result = max(result,lis(i,j,comp));
-			}
-		}
-		printf("%d\n",result);
-
-
+		printf("%d\n",func(-1,-1)-2);
 	}
 }
