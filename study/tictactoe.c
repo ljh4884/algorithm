@@ -106,68 +106,6 @@ int check(char **array)
 	return 2;
 }
 
-int finish(char **array,char turn)
-{
-	if(turn=='x')
-	{
-		if(check(array)==1)
-			return 1;
-		else
-			return 0;
-	}
-	else
-	{
-		if(check(array)==0)
-			return 1;
-		else
-			return 0;
-	}
-}
-
-int min(int a,int b)
-{
-	if(a<b)
-		return a;
-	else
-		return b;
-}
-
-int win(char **array,char turn)
-{
-	char that;
-	int pos = cat(array);
-	if(turn=='x')
-		that='o';
-	else
-		that='x';
-	if(finish(array,that))
-		return -1;
-	if(save[pos]!=-2)
-		return save[pos];
-
-	int mint=2;
-	for(int i=0;i<3;i++)
-	{
-		for(int j=0;j<3;j++)
-		{
-			if(array[i][j]=='.')
-			{
-				array[i][j]=turn;
-				mint = min(mint,win(array,that));
-				array[i][j]='.';
-			}
-		}
-	}
-	if(mint==2||mint==0)
-	{
-		save[pos]=0;
-		return 0;
-	}
-	save[pos]=-mint;
-	return save[pos];
-	
-
-}
 
 int func(char **array,char turn)
 {
@@ -272,7 +210,7 @@ int main()
 	scanf("%d",&c);
 	for(int i=0;i<19683;i++)
 	{
-		save[i]=-2;
+		save[i]=-1;
 	}
 	while(c--)
 	{
@@ -295,24 +233,15 @@ int main()
 			}
 		}
 		if(o<x)
-		{
-			result=win(array,'o');
-			if(result==1)
-				printf("o\n");
-			else if(result==0)
-				printf("TIE\n");
-			else
-				printf("x\n");
-		}
+			result=func(array,'o');
 		else
-		{
-			result=win(array,'x');
-			if(result==1)
-				printf("x\n");
-			else if(result==0)
-				printf("TIE\n");
-			else
-				printf("o\n");
-		}
+			result=func(array,'x');
+		if(result==0)
+			printf("o\n");
+		else if(result==1)
+			printf("x\n");
+		else
+			printf("TIE\n");
+
 	}
 }
