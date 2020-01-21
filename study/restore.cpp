@@ -1,33 +1,41 @@
-#include <stdio.h>
-#include <string.h>
-#include <string>
+/* 아쉽게도 한문자열 조각이 다른 문자열 조각에 포함될 경우를 해결하지 못하여
+ * 다른 코드들을 참고하였다.
+ * 여태까지 푼 문제들중 가장 긴시간을 소요한것 같다.
+ * 알고리즘의 문제라기보단 중복된 문자열을 찾아 지우는 과정이 문제라고 생각한다.
+ */
+
+
 #include <iostream>
+#include <stdio.h>
+#include <string>
+#include <stdlib.h>
+#include <algorithm>
 
 using namespace std;
 
-string array[15];
 int k;
-int rec[16][1<<15];
-int save[16][1<<15];
-string merge(string a,string b)
+string array[15];
+int save[15][1<<15];
+int over[15][15];
+
+string merge(string a, string b)
 {
 	int sa = a.size();
 	int sb = b.size();
-	int check = 1;
+
 	for(int i=0;i<sa;i++)
 	{
 		if(a[i]==b[0])
 		{
-			check=0;
-			int j=1;
-			for(j=1;j+i<sa;j++)
+			int j;
+			for(j=1;i+j<sa;j++)
 			{
-				if(j>=sb)
+				if(j==sb)
 					break;
 				if(a[i+j]!=b[j])
-					check=1;
+					break;
 			}
-			if(check==0)
+			if(j==sb||i+j==sa)
 			{
 				b=b.substr(j);
 			}
@@ -37,106 +45,119 @@ string merge(string a,string b)
 	return a;
 }
 
-int min(int a,int b)
+int func(int last, int bit)
 {
-	if(a<b)
-		return a;
-	else
-		return b;
+	if(bit==(1<<k)-1)
+		return 0;
+	int& ret = save[last][bit];
+	if(ret!=-1)
+		return ret;
+	ret=0;
+	for(int i=0;i<k;i++)
+	{
+		if((bit&(1<<i))==0)
+		{
+			int temp = over[last][i]+func(i,bit+(1<<i));
+			ret = max(ret,temp);
+		}
+	}
+	return ret;
 }
 
-int func(int last,int bit)
-{
-	int check=0;
-	int max=999999;
-	int temp;
-	int tempsize;
-	string result;
-	if(save[last+1][bit]!=-1)
-		return save[last+1][bit];
-	for(int i=0;i<k;i++)
-	{
-		if((bit&(1<<i))==0)
-		{
-			check=1;
-			break;
-		}
-	}
-	if(check==0)
-		return 0;
-	for(int i=0;i<k;i++)
-	{
-		if((bit&(1<<i))==0)
-		{
-			if(last==-1)
-				temp = array[i].size();
-			else 
-				temp = merge(array[last],array[i]).size()-array[last].size();
-			tempsize = func(i,(bit|(1<<i)));
-			if(max>temp+tempsize)
-			{
-				max = temp+func(i,(bit|(1<<i)));
-				rec[last+1][bit]=i;
-			}
-		}
-	}
-	
-	save[last+1][bit]=max;
-	return max;
-}
 string recon(int last,int bit)
 {
-	int check=0;
+	if(bit==(1<<k)-1)
+		return "";
 	for(int i=0;i<k;i++)
 	{
-		if((bit&(1<<i))==0)
-			check=1;
+		if(bit&(1<<i))
+			continue;
+		int use = func(i,bit+(1<<i)) + over[last][i];
+		if(func(last,bit)==use)
+			return (array[i].substr(over[last][i])+recon(i,bit+(1<<i)));
 	}
-	if(check==0)
-		return "";
-	int temp = rec[last+1][bit];
-	return merge(array[temp],recon(temp,bit|(1<<temp)));
+	return "SSIBAL";
 }
-
+int getover(string a,string b)
+{
+	for(int i=min(a.size(),b.size());i>0;i--)
+	{
+		if(a.substr(a.size()-i)==b.substr(0,i))
+			return i;
+	}
+	return 0;
+}
 int main()
 {
 	int c;
 	scanf("%d",&c);
 	while(c--)
 	{
+		int ret = -1;
+		int start;
 		scanf("%d",&k);
-		
 		for(int i=0;i<k;i++)
 		{
-			cin >> array[i];
-			for(int j=0;j<i;j++)
+			cin>>array[i];
+			/*for(int j=0;j<i;j++)
 			{
 				if(array[j].compare(merge(array[j],array[i]))==0)
 				{
-					k--;
 					i--;
+					k--;
 					break;
 				}
 				if(array[i].compare(merge(array[i],array[j]))==0)
 				{
 					array[j]=array[i];
-					k--;
 					i--;
+					k--;
 					break;
 				}
-
+			}*/
+		}
+		while(1)
+		{
+			bool remove = false;
+			for(int i=0;i<k&&!remove;i++)
+			{
+				for(int j=0;j<k;j++)
+				{
+					if(i!=j&&array[i].find(array[j])!=string::npos)
+					{
+						array[j]=array[k-1];
+						k--;
+						remove = true;
+					}
+				}
 			}
-			for(int j=0;j<(1<<k);j++)
+			if(!remove)
+				break;
+		}
+		for(int i=0;i<k;i++)
+		{
+			for(int j=0;j<k;j++)
+			{
+				over[i][j]=getover(array[i],array[j]);
+				//over[i][j]=array[i].size()+array[j].size()-merge(array[i],array[j]).size();
+			}
+		}
+		for(int i=0;i<k;i++)
+		{
+			for(int j=0;j<(1<<15);j++)
 			{
 				save[i][j]=-1;
 			}
 		}
-		for(int i=0;i<(1<<k);i++)
+		for(int i=0;i<k;i++)
 		{
-			save[k][i]=-1;
+			if(ret<func(i,(1<<i)))
+			{
+				ret = func(i,(1<<i));
+				start = i;
+			}
 		}
-		func(-1,0);
-		cout<<recon(-1,0);
+		cout << array[start]+recon(start,(1<<start))+"\n";
 
 	}
 }
