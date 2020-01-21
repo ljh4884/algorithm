@@ -1,10 +1,20 @@
+/*
+ * 어려운 문제는 아니였다.
+ * state를 변경해준뒤
+ * 계산하고
+ * 다시 state를 원래 상태로 돌린다.
+ */
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 
-int save[19683];
+void rp();
 
-int cat(char **array)
+char array[3][3];
+char save[19683];
+
+int cat()
 {
 	int ret=0;
 	for(int i=0;i<3;i++)
@@ -12,165 +22,102 @@ int cat(char **array)
 		for(int j=0;j<3;j++)
 		{
 			ret=ret*3;
-			if(array[i][j]=='o')
+			if(array[i][j]=='x')
 				ret+=1;
-			else if(array[i][j]=='x')
+			if(array[i][j]=='o')
 				ret+=2;
 		}
 	}
 	return ret;
 }
-char **make()
+
+char who()
 {
-	char **array;
-	array = (char**)malloc(sizeof(char*)*3);
+	int o1=0;
+	int o2=0;
+	int x1=0;
+	int x2=0;
+
 	for(int i=0;i<3;i++)
 	{
-		array[i] = (char*)malloc(sizeof(char)*4);
-	}
-	return array;
-}
-char **copy(char **array)
-{
-	char **temp;
-	temp = (char**)malloc(sizeof(char*)*3);
-	for(int i=0;i<3;i++)
-	{
-		temp[i]=(char*)malloc(sizeof(char)*3);
-		for(int j=0;j<3;j++)
-		{
-			temp[i][j]=array[i][j];
-		}
-	}
-	return temp;
-}
-int check(char **array)
-{
-	int o;
-	int x;
-	for(int i=0;i<3;i++)
-	{
-		o=0;
-		x=0;
+		o1=0;
+		o2=0;
+		x1=0;
+		x2=0;
 		for(int j=0;j<3;j++)
 		{
 			if(array[i][j]=='o')
-				o++;
+				o1++;
 			if(array[i][j]=='x')
-				x++;
-		}
-		if(o==3)
-			return 0;
-		if(x==3)
-			return 1;
-		o=0;
-		x=0;
-		for(int j=0;j<3;j++)
-		{
+				x1++;
 			if(array[j][i]=='o')
-				o++;
+				o2++;
 			if(array[j][i]=='x')
-				x++;
+				x2++;
 		}
-		if(o==3)
-			return 0;
-		if(x==3)
-			return 1;
+		if(o1==3)
+			return 'o';
+		if(o2==3)
+			return 'o';
+		if(x1==3)
+			return 'x';
+		if(x2==3)
+			return 'x';
 	}
-	o=0;
-	x=0;
+	o1=0;
+	o2=0;
+	x1=0;
+	x2=0;
 	for(int i=0;i<3;i++)
 	{
 		if(array[i][i]=='o')
-			o++;
-		if(array[i][i]=='x')
-			x++;
+			o1++;
+		else if(array[i][i]=='x')
+			x1++;
+		if(array[i][2-i]=='o')
+			o2++;
+		else if(array[i][2-i]=='x')
+			x2++;
 	}
-	if(o==3)
-		return 0;
-	if(x==3)
-		return 1;
-	x=0;
-	o=0;
+	if(o1==3)
+		return 'o';
+	if(o2==3)
+		return 'o';
+	if(x1==3)
+		return 'x';
+	if(x2==3)
+		return 'x';
+	return 0;
+}
+void rp()
+{
 	for(int i=0;i<3;i++)
 	{
-		if(array[i][2-i]=='o')
-			o++;
-		if(array[i][2-i]=='x')
-			x++;
+		for(int j=0;j<3;j++)
+		{
+			printf("%c",array[i][j]);
+		}
+		printf("\n");
 	}
-	if(o==3)
-		return 0;
-	if(x==3)
-		return 1;
-	return 2;
 }
-
-
-int func(char **array,char turn)
+char func(char turn)
 {
 	char that;
-	int count =0;
-	int count2=0;
-	int pos = cat(array);
+	char temp;
+	int cnt1=0;
+	int cnt2=0;
+	int cnt3=0;
+	int pos = cat();
 	if(save[pos]!=-1)
+
 		return save[pos];
 	if(turn=='x')
 		that='o';
 	else
 		that='x';
-	for(int i=0;i<3;i++)
+	if((temp=who())!=0)
 	{
-		for(int j=0;j<3;j++)
-		{
-			if(array[i][j]=='.')
-			{
-				count++;
-				count2++;
-				char **temp = copy(array);
-				temp[i][j]=turn;
-				if(turn=='o')
-				{
-					if(check(temp)==0)
-					{
-						save[pos]=0;
-						return 0;
-					}
-					if(func(temp,that)==1)
-						count--;
-				}
-				else if(turn=='x')
-				{
-					if(check(temp)==1)
-					{
-						save[pos]=1;
-						return 1;
-					}
-					if(func(temp,that)==0)
-						count--;
-				}
-				
-			}
-		}
-	}
-	if(count2==0)
-	{
-		return check(array);
-		save[pos]=2;
-		return 2;
-	}
-	if(count==0)
-	{
-		if(turn=='x')
-		{
-			save[pos]=0;
-			return 0;
-		}
-		if(turn=='o')
-		{
-			save[pos]=1;
-			return 1;
-		}
+		return temp;
 	}
 	for(int i=0;i<3;i++)
 	{
@@ -178,35 +125,40 @@ int func(char **array,char turn)
 		{
 			if(array[i][j]=='.')
 			{
-				char **temp = copy(array);
-				temp[i][j]=turn;
-				if(turn=='x')
+				cnt1++;
+				array[i][j]=turn;
+				temp=func(that);
+				if(temp==turn)
 				{
-					if(func(temp,that)!=0)
-					{
-						save[pos]=func(temp,that);
-						return save[pos];
-					}
+					array[i][j]='.';
+					return turn;
 				}
-				else if(turn=='o')
+				else if(temp==that)
 				{
-					if(func(temp,that)!=1)
-					{
-						save[pos]=func(temp,that);
-						return save[pos];
-					}
+					cnt2++;
 				}
+				else
+				{
+					cnt3++;
+				}
+				array[i][j]='.';
 			}
 		}
 	}
-	save[pos]=2;
-	return 2;
+	if(cnt1==0)
+		return 0;
+	else if(cnt1==cnt2)
+		return that;
+	if(cnt3!=0)
+		return 0;
+	return 1;
 
 }
 
 int main()
 {
 	int c;
+	char ret;
 	scanf("%d",&c);
 	for(int i=0;i<19683;i++)
 	{
@@ -214,10 +166,8 @@ int main()
 	}
 	while(c--)
 	{
-		char **array=make();
-		int x=0;
 		int o=0;
-		int result;
+		int x=0;
 		for(int i=0;i<3;i++)
 		{
 			scanf("%s",array[i]);
@@ -226,19 +176,19 @@ int main()
 		{
 			for(int j=0;j<3;j++)
 			{
-				if(array[i][j]=='x')
-					x++;
 				if(array[i][j]=='o')
 					o++;
+				else if(array[i][j]=='x')
+					x++;
 			}
 		}
 		if(o<x)
-			result=func(array,'o');
+			ret = func('o');
 		else
-			result=func(array,'x');
-		if(result==0)
+			ret = func('x');
+		if(ret=='o')
 			printf("o\n");
-		else if(result==1)
+		else if(ret=='x')
 			printf("x\n");
 		else
 			printf("TIE\n");
