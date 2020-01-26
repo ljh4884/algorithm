@@ -2,6 +2,7 @@
  * 다른 코드들을 참고하였다.
  * 여태까지 푼 문제들중 가장 긴시간을 소요한것 같다.
  * 알고리즘의 문제라기보단 중복된 문자열을 찾아 지우는 과정이 문제라고 생각한다.
+ * 그냥 merge함수에 문제가 있는듯?
  */
 
 
@@ -138,8 +139,8 @@ int main()
 		{
 			for(int j=0;j<k;j++)
 			{
-				over[i][j]=getover(array[i],array[j]);
-				//over[i][j]=array[i].size()+array[j].size()-merge(array[i],array[j]).size();
+				//over[i][j]=getover(array[i],array[j]);
+				over[i][j]=array[i].size()+array[j].size()-merge(array[i],array[j]).size();
 			}
 		}
 		for(int i=0;i<k;i++)
