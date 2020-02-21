@@ -1,0 +1,106 @@
+set tags=./tags
+
+set nu
+set title
+set autoread 	"외부에서 변경됐을 때 자동불러오기
+set mouse=a		"마우스를 클릭한 위치에 커서 놓기 & 드래그 가능 but 붙여넣기 불가
+"set paste		"autucompl plugin이 적용이 안됨
+set autoindent
+set cindent
+set ts=4		"tab 너비
+set shiftwidth=4 "자동 indent 시 너비
+
+set hlsearch	"검색했을 때 하이라이트
+set fileencodings=utf-8;euc-kr
+
+set noswapfile
+set nobackup
+set t_ut=""
+syntax on
+filetype on
+command Compile :!gcc %:t && ./a.out
+colorscheme jellybeans
+
+" plugin
+" PlugInstall [name ...]
+" PlugUpgrade / PlugClean[!] / PlugStatus
+"
+call plug#begin()
+Plug 'scrooloose/nerdtree'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'vim-scripts/AutoComplPop'
+Plug 'w0rp/ale'
+call plug#end()
+
+let g:airline_section_z=''
+let g:airline#extensions#whitespace#mixed_indent_algo=0
+let g:airline#extensions#whitespace#enabled=0
+"ale
+let g:ale_sign_column_always = 1
+let g:airline#extensions#ale#enabled = 1
+nmap <silent> <C-Up> <Plug>(ale_previous_wrap)
+nmap <silent> <C-Down> <Plug>(ale_next_wrap)
+
+" tag list
+"let Tlist_Auto_Open = 0
+"let Tlist_Exit_OnlyWindow = 0
+"let Tlist_Use_Right_Window = 0
+
+"NERD tree toggle 단축키
+"map <TAB> <ESC>:NERDTreeToggle<CR>
+"NERD tree tab 이동
+"map <M-Left> gT
+"map <M-Right> gt
+
+"ctrl + w 창이동
+"map <S-Up> <C-w><Up>
+"map <S-Left> <C-w><Left>
+"map <S-Right> <C-w><Right>
+"map <S-Down> <C-w><Down>
+
+map <C-d> <ESC>:q<CR>
+"마지막에 수정된 곳에서 시작
+au BufReadPost *
+\ if line("'\"") > 0 && line("'\"") <= line("$") |
+\ exe "norm g`\"" |
+\ endif
+
+"if has("cscope")
+"	set cscopetag
+"	set csto=0
+"	if filereadable("cscope.out")
+"		cs add cscope.out
+"	elseif $CSCOPE_DB != ""
+"		cs add $CSCOPE_DB
+"	endif
+"	set cscopeverbose
+"
+"	nmap <C-\>s :cs find s <C-R>=expand("<cword>")<CR><CR>
+"	nmap <C-\>g :cs find g <C-R>=expand("<cword>")<CR><CR>
+"	nmap <C-\>c :cs find c <C-R>=expand("<cword>")<CR><CR>
+"	nmap <C-\>t :cs find t <C-R>=expand("<cword>")<CR><CR>
+"	nmap <C-\>e :cs find e <C-R>=expand("<cword>")<CR><CR>
+"	nmap <C-\>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
+"	nmap <C-\>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
+"	nmap <C-\>d :cs find d ^<C-R>=expand("<cword>")<CR><CR>
+"
+"	nmap <C-@>s :scs find s <C-R>=expand("<cword>")<CR><CR>
+"	nmap <C-@>g :scs find g <C-R>=expand("<cword>")<CR><CR>
+"	nmap <C-@>c :scs find c <C-R>=expand("<cword>")<CR><CR>
+"	nmap <C-@>t :scs find t <C-R>=expand("<cword>")<CR><CR>
+"	nmap <C-@>e :scs find e <C-R>=expand("<cword>")<CR><CR>
+"	nmap <C-@>f :scs find f <C-R>=expand("<cfile>")<CR><CR>
+"	nmap <C-@>i :scs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
+"	nmap <C-@>d :scs find d <C-R>=expand("<cword>")<CR><CR>
+"
+"	nmap <C-@><C-@>s :vert scs find s <C-R>=expand("<cword>")<CR><CR>
+"	nmap <C-@><C-@>g :vert scs find g <C-R>=expand("<cword>")<CR><CR>
+"	nmap <C-@><C-@>c :vert scs find c <C-R>=expand("<cword>")<CR><CR>
+"	nmap <C-@><C-@>t :vert scs find t <C-R>=expand("<cword>")<CR><CR>
+"	nmap <C-@><C-@>e :vert scs find e <C-R>=expand("<cword>")<CR><CR>
+"	nmap <C-@><C-@>f :vert scs find f <C-R>=expand("<cfile>")<CR><CR>
+"	nmap <C-@><C-@>i :vert scs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
+"	nmap <C-@><C-@>d :vert scs find d <C-R>=expand("<cword>")<CR><CR>
+"endif
+
