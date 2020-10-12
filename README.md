@@ -1,4 +1,2 @@
-# not yet
-klis %n
-dragon %n
+# algospot 알고리즘 공부
 
