@@ -1,0 +1,11 @@
+
+바로 이전 문자열과 합쳤을때 길이가 얼마나 늘어나는가
+
+cadabra, dabr, abrac
+
+cadabra	->	cadabra	->	dabrac	이전 문자와만 합친것
+cadabra	->	cadabra	->	cadabrac	총 문자
+7	->	0	->	2	->	9
+
+dabr 이 cadabra에 완전히 포함되어 dabr	->	abrac 을 제대로 해결할 수 없음
+미리 포함되는 문자열은 제거시킴 (이전에도 그렇게 했던거 같음)
