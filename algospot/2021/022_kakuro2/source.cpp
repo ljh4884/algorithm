@@ -8,16 +8,30 @@ typedef struct data
 	int type;
 	int value;
 	int count;
-	int check;
+	int check[10];
 }data;
 
 int game[20][20];
 
-int min_num[20][20];
-int max_num[20][20];
 int n,q;
 data hint[800];
 
+
+int min(int a, int b)
+{
+	if(a<b)
+		return a;
+	else
+		return b;
+}
+
+int max(int a, int b)
+{
+	if(a>b)
+		return a;
+	else
+		return b;
+}
 
 int main()
 {
@@ -47,7 +61,8 @@ int main()
 			hint[i].type = t;
 			hint[i].value = v;
 			hint[i].count = 0;
-			hint[i].check = 0;
+			for(int j=0;j<10;j++)
+				hint[i].check[j] = 0;
 
 			if(t == 0)
 			{
@@ -58,20 +73,17 @@ int main()
 					x+=1;
 				}
 
+				int temp = 0;
+				temp = min(9,hint[i].value - (hint[i].count - 1));
 
-				int min_sum = 0;
-				int max_sum = 0;
-				for(int sum=0;sum<hint[i].count-1;sum++)
-				{
-					min_sum+= (sum+1);
-					max_sum+= (9-sum);
-				}
+				for(int j=temp+1;j<10;j++)
+					hint[i].check[j] = 1;
+
+				temp = max(1, hint[i].value - 9 * (hint[i].count - 1));
+
 				
-				x = hint[i].x + 1;
-				for(int pos = 0;pos<hint[i].count;
-				{
-					
-				}
+
+				
 			}
 			else
 			{
