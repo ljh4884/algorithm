@@ -34,8 +34,6 @@ int main()
 			for(int j=0;j<n;j++)
 			{
 				scanf("%d",&game[i][j]);
-				hint[i][j][0] = 0;
-				hint[i][j][1] = 0;
 			}
 		}
 		
