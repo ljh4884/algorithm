@@ -22,7 +22,8 @@ bool compare(const data& d1,const data& d2)
 
 data sign[5000];
 int check[5000];
-int n,k;
+int n;
+long long k;
 int main()
 {
 	int c;
@@ -30,7 +31,7 @@ int main()
 	while(c--)
 	{
 		int pos,m,g;
-		scanf("%d %d",&n,&k);
+		scanf("%d %lld",&n,&k);
 
 		for(int i=0;i<n;i++)
 		{
@@ -47,7 +48,7 @@ int main()
 		sort(sign,sign+n,compare);
 
 
-		int cnt = 0;
+		long long cnt = 0;
 		int end_pos = 8030001;
 		int last_index = n;
 		int start_pos = 0;
