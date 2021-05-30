@@ -1,5 +1,7 @@
 #include <stdio.h>
+#include <iostream>
 
+using namespace std;
 
 typedef struct data
 {
@@ -17,20 +19,24 @@ int n,q;
 data hint[800];
 
 
-int min(int a, int b)
+int func(int pos)
 {
-	if(a<b)
-		return a;
-	else
-		return b;
-}
 
-int max(int a, int b)
-{
-	if(a>b)
-		return a;
-	else
-		return b;
+	for(int i=0;i<hint[pos].count;i++)
+	{
+		if(hint[pos].type == 0)
+		{
+			
+		}
+	}
+
+	for(int i=1;i<10;i++)
+	{
+		if(check[i] == 1)
+			continue;
+	}
+
+	return 1;
 }
 
 int main()
@@ -72,18 +78,6 @@ int main()
 					hint[i].count++;
 					x+=1;
 				}
-
-				int temp = 0;
-				temp = min(9,hint[i].value - (hint[i].count - 1));
-
-				for(int j=temp+1;j<10;j++)
-					hint[i].check[j] = 1;
-
-				temp = max(1, hint[i].value - 9 * (hint[i].count - 1));
-
-				
-
-				
 			}
 			else
 			{
@@ -95,7 +89,20 @@ int main()
 				}
 			}
 
+			int cond_min = 0;
+			int cond_max = 0;
+			for(int j=1;j<hint[i].count;j++)
+			{
+				cond_min+=j;
+				cond_max+=(10-j);
+			}
+			cond_min = min(hint[i].value - cond_min, 9);
+			cond_max = max(cond_amx - hint[i].value, 1);
 
+			for(int j=1;j<cond_max;j++)
+				check[j] = 1;
+			for(int j=cond_min+1;j<10;j++)
+				check[j] = 1;
 
 		}
 
