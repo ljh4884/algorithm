@@ -19,23 +19,12 @@ int n,q;
 data hint[800];
 
 
+
+
 int func(int pos)
 {
-
-	for(int i=0;i<hint[pos].count;i++)
-	{
-		if(hint[pos].type == 0)
-		{
-			
-		}
-	}
-
-	for(int i=1;i<10;i++)
-	{
-		if(check[i] == 1)
-			continue;
-	}
-
+	int x = hint[pos].x;
+	int y = hint[pos].y;
 	return 1;
 }
 
