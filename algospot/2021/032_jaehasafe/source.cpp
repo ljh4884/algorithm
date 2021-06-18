@@ -1,8 +1,7 @@
 #include <stdio.h>
-#include <iostream>
-#include <string>
-
-using namespace std;
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 int main()
 {
@@ -11,41 +10,71 @@ int main()
 	while(c--)
 	{
 		int n;
+		int size = 0;
+		char str[51][10001];
 		int way = 0;
 		int tic = 0;
-		int size = 0;
-		string str[51];
 		scanf("%d",&n);
-		
 		for(int i=0;i<n+1;i++)
-			cin >> str[i];
-		size = str[0].length();
+			scanf("%s",str[i]);
+		size = strlen(str[0]);
+
 		for(int i=0;i<n;i++)
 		{
-			string prev = str[i];
-			while(1)
+			int check = 0;
+			if(way)
 			{
-				
-				if(way == 0)
+				for(int pos_next = 1;pos_next<size;pos_next++)
 				{
-					string temp = prev.substr(size-1);
-					prev = temp + prev.substr(0,size-1);
+					if(str[i+1][0] == str[i][pos_next])
+					{
+						check = 1;
+						for(int j=1;j<size-pos_next;j++)
+						{
+							if(str[i+1][j] != str[i][pos_next+j])
+							{
+								check = 0;
+								break;
+							}
+						}
+						if(check == 1)
+						{
+							tic+=pos_next;
+							break;
+						}
+					}				
 				}
-				else
+			}
+			else
+			{
+				for(int pos_next = 1;pos_next<size;pos_next++)
 				{
-					string temp = prev.substr(0,1);
-					prev = prev.substr(1) + temp;
+					if(str[i][0] == str[i+1][pos_next])
+					{
+						check = 1;
+						for(int j=1;j<size-pos_next;j++)
+						{
+							if(str[i][j] != str[i+1][pos_next+j])
+							{
+								check = 0;
+								break;
+							}
+						}
+						if(check == 1)
+						{
+							tic+=pos_next;
+							break;
+						}
+					}
 				}
-
-				tic++;
-				int cond = prev.compare(str[i+1]);
-				if(cond == 0)
-					break;
-
+				//same cond check needed
 			}
 			way = !way;
-		}
 
+		}
 		printf("%d\n",tic);
+
+
+
 	}
 }
