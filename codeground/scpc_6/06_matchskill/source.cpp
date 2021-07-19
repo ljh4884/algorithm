@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <algorithm>
-
+#include <math.h>
 using namespace std;
 int main()
 {
@@ -18,32 +18,75 @@ int main()
 		for(int i=0;i<n;i++)
 			scanf("%d",&B[i]);
 
-		if(n > 5000)
-		{
-			printf("0\n");
-			continue;
-		}
 		sort(A,A+n);
 		sort(B,B+n);
 
-		long long ans = (long long)200000*(long long)1000000000;
-		for(int pivot=0;pivot<n;pivot++)
+			
+
+		int max_v = 0;
+		int max_i = 0;
+		long long ans = 0;
+		long long temp_ans = 0;
+		for(int i=0;i<n;i++)
 		{
-			int temp = 0;
-			long long cur_ans = 0;
+			int value = abs(A[i] - B[i]);
+			if(value > max_v)
+			{
+				max_v = value;
+				max_i = i;
+			}
+			temp_ans += value;
+		}
+
+		int tt = A[max_i];
+		A[max_i] = B[max_i];
+
+		temp_ans -= max_v;
+
+		int max_vv=0;
+		int max_ii=0;
+		for(int i=0;i<n;i++)
+		{
+			int value = abs(A[i] - B[i]);
+			if(value > max_vv)
+			{
+				max_vv = value;
+				max_ii = i;
+			}
+		}
+		long long temp_ans2 = 0;
+
+		if(max_ii < max_i)
+		{
+			for(int i = max_ii;i<max_i;i++)
+			{
+				A[i] = A[i+1];
+			}
+
+			A[max_i-1] = tt;
+		
+			for(int i=0;i<n;i++)
+			{	
+				temp_ans2 += abs(A[i] - B[i]);
+			}
+		}
+		else if(max_ii > max_i)
+		{
+			for(int i = max_ii;i>max_i;i--)
+			{
+				A[i] = A[i-1];
+			}
+			A[max_i+1] = tt;
 			for(int i=0;i<n;i++)
 			{
-				if(pivot == i)
-				{
-					temp = 1;
-					continue;
-				}
-				cur_ans += max((A[i+temp] - B[i]),(B[i] - A[i+temp]));
-
+				temp_ans2 += abs(A[i] - B[i]);
 			}
-			ans = min(ans, cur_ans);
-
 		}
+		ans = min(temp_ans, temp_ans2);
+
+
+
+
 		printf("Case #%d\n",cnt++);
 		printf("%lld\n",ans);
 	}
