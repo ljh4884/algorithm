@@ -1,12 +1,46 @@
-#include <algorithm>
 #include <stdio.h>
-#include <iostream>
+#include <vector>
 
 using namespace std;
 
-int n,m;
-long long seg[100000];
-long long check[20000];
+vector<int> edge[501];
+
+int A[2000];
+int B[2000];
+int visit[501];
+char ans[2001];
+
+int n,m,k;
+
+int cycle(int pos)
+{
+	if(visit[pos] == -1)
+		return 1; //cycle
+	if(visit[pos] == 1)
+		return 0; //not
+
+	visit[pos] = -1;
+
+	for(int i=0;i<edge[pos].size();i++)
+	{
+		if(cycle(edge[pos][i]) == 1)
+			return 1;
+	}
+	visit[pos] = 1;
+	return 0;
+}
+
+int solve(int a, int b)
+{
+	int ret;
+	edge[a].push_back(b);
+	for(int i=0;i<=n;i++)
+		visit[i] = 0;
+	ret = cycle(a);
+	//edge[a].pop_back();
+	return ret;
+}
+
 int main()
 {
 	int c;
@@ -14,35 +48,40 @@ int main()
 	scanf("%d",&c);
 	while(c--)
 	{
-		scanf("%d %d",&n,&m);
+		scanf("%d %d %d",&n,&m,&k);
 		
-		long long ans = 0;
-		for(int i=0;i<n;i++)
+		
+		for(int i=0;i<=n;i++)
+			edge[i].clear();
+			
+		int a,b;
+		for(int i=0;i<m;i++)
 		{
-			int temp = 0;
-			scanf("%d",&temp);
-			for(int j=0;j<temp;j++)
-				scanf("%lld",&seg[j]);
-			sort(seg,seg+temp);
+			scanf("%d %d",&a,&b);
+			edge[a].push_back(b);
+		}
+		for(int i=0;i<k;i++)
+			scanf("%d %d",&A[i],&B[i]);
 
-			for(int j=0;j<4;j++)
+		for(int i=0;i<k;i++)
+		{
+			if(solve(A[i],B[i]) == 0)
 			{
-				ans += seg[j];
+				ans[i] = '0';
 			}
-
-			if(temp%2 == 1)
+			else
 			{
-				ans += seg[0];
+				edge[A[i]].pop_back();
+				edge[B[i]].push_back(A[i]);
+				ans[i] = '1';
 			}
-			check[i] = (seg[2] + seg[3]);
-
 		}
 
-		sort(check,check+n);
-		ans -= check[n-1];
-		ans -= check[n-2];
+		ans[k] = '\0';
 		printf("Case #%d\n",cnt++);
-		printf("%lld\n",ans);
-	}
+		printf("%s\n",ans);
 
+
+
+	}
 }
