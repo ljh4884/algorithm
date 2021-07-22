@@ -3,7 +3,7 @@
 
 using namespace std;
 int r,c;
-int mine[751][751];
+int mine[750][750];
 
 
 int dec(int y, int x, int size)
