@@ -3,8 +3,8 @@
 
 using namespace std;
 int r,c;
+int g_ret;
 int mine[750][750];
-
 
 int dec(int y, int x, int size)
 {
@@ -40,12 +40,18 @@ int inc(int y, int x, int size)
 			ret = inc(y+1, x, size+1);
 		}
 	}
+	if((ret <= g_ret) && (size <= g_ret))
+		return g_ret;
 	if(size > 1)
 	{
 		if(dec(y, x, size-2) == 1)
+		{
+			if(max(ret,size) > g_ret)
+				g_ret = max(ret,size);
 			return max(ret,size);
+		}
 		else
-			return -2000;
+			return max(ret, -2000);
 	}
 	else
 	{
@@ -67,18 +73,19 @@ int main()
 			mine[i][j] = temp[j]-48;
 		}
 	}
-		int ans = 0;
-		for(int i=0;i<r;i++)
+	int ans = 0;
+	g_ret = 0;
+	for(int i=0;i<r;i++)
+	{
+		for(int j=0;j<c;j++)
 		{
-			for(int j=0;j<c;j++)
+			if(mine[i][j] == 1)
 			{
-				if(mine[i][j] == 1)
-				{
-					ans = max(ans,1);
-					ans = max(ans,inc(i,j,0));
-				}
+				ans = max(ans,1);
+				ans = max(ans,inc(i,j,0));
 			}
 		}
-		printf("%d\n",ans);
+	}
+	printf("%d\n",ans);
 
 }
