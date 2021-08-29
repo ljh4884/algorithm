@@ -1,72 +1,50 @@
+def solution(a_list):
+    answer = []
 
-temp = input().split(" ")
+    for a in a_list:
+        cond = True
+        count = 0
+        for seg in a:
+            if seg == 'a':
+                count += 1
 
-n = int(temp[0])
-m = float(temp[1]) / 100
+        while True:
+            if a == 'a' or a == '':
+                cond = True
+                break
 
+            while a[0] == 'a':
+                a = a[1:]
+                count -= 1
+            while a[len(a) - 1] == 'a':
+                a = a[:len(a) - 1]
+                count -= 1
 
-total = []
+            left = 0
+            right = 0
 
-sum_water = 0
-sum_matter = 0
-sum_total = 0
+            for i in range(len(a)):
+                if a[i] == 'a':
+                    break
+                left += 1
 
-for _ in range(n):
-    temp = input().split(" ")
+            for i in range(len(a) - 1, -1, -1):
+                if a[i] == 'a':
+                    break
+                right += 1
 
-    d = float(temp[0])
-    t = float(temp[1])
+            if left != right:
+                cond = False
+                break
 
-    temp = t * d / 100
+            if count != left:
+                cond = False
+                break
 
-    total.append((d, t, temp, t-temp))
+            a = a[left:len(a) - right]
+        answer.append(cond)
+    return answer
 
-    sum_water += t-temp
-    sum_matter += temp
-    sum_total += t
+test = solution(["abab","bbaa","bababa","bbbabababbbaa"])
 
-total = sorted(total)
-
-cur_value = sum_matter / sum_total
-check = False
-if cur_value == m:
-    print(sum_total)
-elif cur_value < m:
-    i = 0
-    for i in range(n):
-        matter = sum_matter - total[i][2]
-        plus = sum_total - total[i][1]
-        if plus == 0:
-            check = True
-            break
-        if matter / plus >= m:
-            break
-        sum_matter -= total[i][2]
-        sum_total -= total[i][1]
-    if check:
-        print(0.0)
-    else:
-        x = (m * sum_total - sum_matter) / (m * total[i][1] - total[i][2])
-        ans = ans = sum_total - x * total[i][1]
-        print(ans)
-else:
-    i = n-1
-    for i in range(n-1, -1, -1):
-        matter = sum_matter - total[i][2]
-        plus = sum_total - total[i][1]
-        if plus == 0:
-            check = True
-            break
-        if matter / plus <= m:
-            break
-        sum_matter -= total[i][2]
-        sum_total -= total[i][1]
-    if check:
-        print(0.0)
-    else:
-        x = (m * sum_total - sum_matter) / (m * total[i][1] - total[i][2])
-        ans = sum_total - x * total[i][1]
-        print(ans)
-
-
-
+print(test)

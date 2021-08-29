@@ -22,7 +22,7 @@ func solve(count int) int {
 					if table[i+1][j] == 0 && table[i+1][j-1] == 0 {
 						table[i+1][j] = 1
 						table[i+1][j-1] = 1
-						ret += solve(count+2)
+						ret += solve(count+3)
 						table[i+1][j] = 0
 						table[i+1][j-1] = 0
 						
@@ -34,7 +34,7 @@ func solve(count int) int {
 					if table[i+1][j] == 0 && table[i][j+1] == 0 {
 						table[i+1][j] = 1
 						table[i][j+1] = 1
-						ret += solve(count+2)
+						ret += solve(count+3)
 						table[i][j+1] = 0
 						table[i+1][j] = 0
 						
@@ -44,7 +44,7 @@ func solve(count int) int {
 					if table[i+1][j] == 0 && table[i+1][j+1] == 0 {
 						table[i+1][j] = 1
 						table[i+1][j+1] = 1
-						ret += solve(count+2)
+						ret += solve(count+3)
 						table[i+1][j] = 0
 						table[i+1][j+1] = 0
 						
@@ -55,7 +55,7 @@ func solve(count int) int {
 					if table[i][j+1] == 0 && table[i+1][j+1] == 0 {
 						table[i][j+1] = 1
 						table[i+1][j+1] = 1
-						ret += solve(count+2)
+						ret += solve(count+3)
 						table[i][j+1] = 0
 						table[i+1][j+1] = 0
 						
@@ -101,7 +101,7 @@ func main() {
 				}
 				
 			}
-		}	
+		}
 		fmt.Println(solve(0))
 		
 
