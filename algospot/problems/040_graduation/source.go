@@ -3,7 +3,6 @@ package main
 import "fmt"
 
 var INF = 123456
-
 var n,k,m,l int
 
 var pre_class[12] int
