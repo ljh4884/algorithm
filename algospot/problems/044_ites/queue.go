@@ -17,6 +17,8 @@ func A2num(A int) int {
 
 func main() {
 	var C = 0
+	var size = 5000001
+	var queue = make([]int, size)
 	fmt.Scan(&C)
 	for TC := 0; TC < C; TC++ {
 		var k,n int
@@ -24,12 +26,17 @@ func main() {
 
 
 		var A = 1983
-		var B = 1983
 		var num = 1984
 		var psum = 1984
 		
 		var ret = 0
-		
+
+		var head = 0
+		var tail = 1
+
+	
+		queue[0] = 1984
+
 		for i := 0; i < n; i++ {
 			if psum > k {
 				for ; ; {
@@ -38,23 +45,23 @@ func main() {
 						break
 					}
 
-					num = A2num(B)
-					psum -= num
-					B = next_A(B)
+					psum -= queue[head]
+					head = (head + 1)%size
 					
 				}
 			}
 
 			if psum == k {
 				ret += 1
-				num = A2num(B)
-				psum -= num
-				B = next_A(B)
+				psum -= queue[head]
+				head = (head + 1)%size
 			}
 
 			A = next_A(A)
 			num = A2num(A)
 			psum += num
+			queue[tail] = num
+			tail = (tail+1)%size
 		}
 
 		fmt.Println(ret)
