@@ -8,7 +8,7 @@ var psum[100001] int
 var count[100000] int
 
 func main() {
-	
+		
 	var reader = bufio.NewReader(os.Stdin)
 	var writer = bufio.NewWriter(os.Stdout)
 	var C = 0

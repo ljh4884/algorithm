@@ -3,9 +3,6 @@ package main
 import "fmt"
 import "sort"
 var n,k int
-func remove(list []int, pos int) []int {
-	return append(list[:pos], list[pos+1:]...)
-}
 
 func main() {
 	var C = 0
@@ -20,7 +17,7 @@ func main() {
 		}
 		var pos = 0
 		for ;len(list) != 2; {
-			list = remove(list, pos)
+			list = append(list[:pos], list[pos+1:]...)
 			pos = (pos + k - 1) % len(list)
 		}
 		sort.Ints(list)
